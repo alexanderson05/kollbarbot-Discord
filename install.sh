@@ -1,32 +1,17 @@
 #!/usr/bin/env bash
-# Installs (or updates) one bot from bots/<name> as a systemd service on Ubuntu.
-# Usage: sudo ./install.sh <bot-name>
+# Installs (or updates) the kollbar bot as a systemd service on Ubuntu.
+# Usage: sudo ./install.sh
 set -euo pipefail
 
 if [[ $EUID -ne 0 ]]; then
-  echo "Please run with sudo: sudo ./install.sh <bot-name>"
+  echo "Please run with sudo: sudo ./install.sh"
   exit 1
 fi
 
-BOT_NAME="${1:-}"
 REPO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-
-if [[ -z "$BOT_NAME" ]]; then
-  echo "Usage: sudo ./install.sh <bot-name>"
-  echo "Available bots:"
-  ls -1 "$REPO_DIR/bots"
-  exit 1
-fi
-
-SRC_DIR="$REPO_DIR/bots/$BOT_NAME"
-if [[ ! -f "$SRC_DIR/bot.py" ]]; then
-  echo "Bot '$BOT_NAME' not found (expected $SRC_DIR/bot.py)."
-  exit 1
-fi
-
-RUN_USER="discordbots"
-INSTALL_DIR="/opt/discord-bots/$BOT_NAME"
-SERVICE_NAME="discord-$BOT_NAME"
+RUN_USER="kollbar"
+INSTALL_DIR="/opt/kollbar-bot"
+SERVICE_NAME="kollbar-bot"
 SERVICE_FILE="/etc/systemd/system/$SERVICE_NAME.service"
 
 echo "==> Installing system packages"
@@ -35,12 +20,12 @@ apt-get install -y python3 python3-venv python3-pip
 
 echo "==> Creating service user"
 if ! id -u "$RUN_USER" &>/dev/null; then
-  useradd --system --home-dir "/opt/discord-bots" --shell /usr/sbin/nologin "$RUN_USER"
+  useradd --system --home-dir "$INSTALL_DIR" --shell /usr/sbin/nologin "$RUN_USER"
 fi
 
 echo "==> Copying bot files to $INSTALL_DIR"
 mkdir -p "$INSTALL_DIR"
-cp -r "$SRC_DIR/." "$INSTALL_DIR/"
+cp "$REPO_DIR/bot.py" "$REPO_DIR/requirements.txt" "$REPO_DIR/.env.example" "$INSTALL_DIR/"
 
 echo "==> Setting up Python virtualenv"
 if [[ ! -d "$INSTALL_DIR/venv" ]]; then
@@ -61,7 +46,10 @@ if [[ ! -f "$ENV_FILE" ]]; then
     key="${line%%=*}"
     default="${line#*=}"
     if [[ "$key" == "DISCORD_TOKEN" ]]; then
-      read -rsp "$key (hidden, required): " value; echo
+      value=""
+      while [[ -z "$value" ]]; do
+        read -rsp "$key (hidden, required): " value; echo
+      done
     else
       read -rp "$key [${default}]: " value
       value="${value:-$default}"
@@ -79,7 +67,7 @@ chown -R "$RUN_USER:$RUN_USER" "$INSTALL_DIR"
 echo "==> Writing systemd service $SERVICE_NAME"
 cat > "$SERVICE_FILE" << UNIT
 [Unit]
-Description=Discord bot: $BOT_NAME
+Description=kollbar Discord bot
 After=network-online.target
 Wants=network-online.target
 
