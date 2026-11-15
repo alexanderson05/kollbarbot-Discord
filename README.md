@@ -6,6 +6,8 @@
 <br>
 A Discord bot with welcome messages, button tickets, moderation tools and warnings
 
+🎨 **طراح / Designer:** alexanderson
+
 [![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB?logo=python&logoColor=white)](#)
 [![discord.py](https://img.shields.io/badge/discord.py-2.4%2B-5865F2?logo=discord&logoColor=white)](#)
 [![Ubuntu](https://img.shields.io/badge/Ubuntu-22.04%20%7C%2024.04-E95420?logo=ubuntu&logoColor=white)](#)
@@ -257,6 +259,6 @@ python bot.py
 
 <div align="center">
 
-Made with ❤️ for the kollbar community
+🎨 طراحی شده توسط **alexanderson** • Designed by **alexanderson**
 
 </div>
