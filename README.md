@@ -60,7 +60,7 @@ A Discord bot with welcome messages, button tickets, moderation tools and warnin
 ### 🚀 نصب
 
 ```bash
-git clone git@github.com:alexanderson05/kollbar-bot.git
+git clone git@github.com:<your-username>/kollbar-bot.git
 cd kollbar-bot
 sudo ./install.sh
 ```
@@ -172,7 +172,7 @@ python bot.py
 ### 🚀 Install
 
 ```bash
-git clone git@github.com:alexanderson05/kollbar-bot.git
+git clone git@github.com:<your-username>/kollbar-bot.git
 cd kollbar-bot
 sudo ./install.sh
 ```
