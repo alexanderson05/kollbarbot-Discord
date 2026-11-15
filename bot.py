@@ -1,3 +1,8 @@
+"""
+kollbar bot
+طراح / Designer: alexanderson
+"""
+
 import asyncio
 import datetime
 import io
@@ -9,6 +14,9 @@ import discord
 from discord import app_commands
 from discord.ext import commands
 from dotenv import load_dotenv
+
+__author__ = "alexanderson"
+DESIGNER_CREDIT = "طراح: alexanderson"
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 load_dotenv(os.path.join(BASE_DIR, ".env"))
@@ -209,6 +217,7 @@ async def setup_ticket(interaction: discord.Interaction):
         description="Ba Salam , Jahat Vojod Moshkel Ticket Baz Konid",
         color=discord.Color.green(),
     )
+    embed.set_footer(text=DESIGNER_CREDIT)
     if WELCOME_GIF_URL:
         embed.set_image(url=WELCOME_GIF_URL)
     await interaction.response.send_message(embed=embed, view=TicketView())
@@ -356,6 +365,7 @@ async def userinfo(interaction: discord.Interaction, member: discord.Member = No
     embed.add_field(name="تگ", value=member.mention)
     embed.add_field(name="حضور آنلاین", value=str(member.status))
     embed.add_field(name="نقش‌ها", value=", ".join(roles) if roles else "ندارد")
+    embed.set_footer(text=DESIGNER_CREDIT)
     await interaction.response.send_message(embed=embed)
 
 
@@ -368,6 +378,7 @@ async def serverinfo(interaction: discord.Interaction):
     embed.add_field(name="کانال‌ها", value=len(guild.channels))
     embed.add_field(name="رول‌ها", value=len(guild.roles))
     embed.add_field(name="مالک سرور", value=str(guild.owner))
+    embed.set_footer(text=DESIGNER_CREDIT)
     await interaction.response.send_message(embed=embed)
 
 
